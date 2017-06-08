@@ -6,7 +6,7 @@ import (
 )
 
 func TestFIterative0Through5(t *testing.T) {
-	for i := 0; i <= 5; i++ {
+	for i := 0; i <= 15; i++ {
 		assert.Equal(t, FRecursive(i), FIterative(i))
 	}
 }

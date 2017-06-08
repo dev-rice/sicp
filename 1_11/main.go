@@ -22,18 +22,6 @@ func FRecursive(n int) int {
 // the process should terminate. In computing n!, the number of steps required
 // grows linearly with n. Such a process is called a linear iterative process.
 
-func FIterative(n int) int {
-	return fIterator(1, 0, n)
-}
-
-func fIterator(counter int, result int, n int) int {
-	if n < 3 {
-		return result
-	} else {
-		return fIterator(counter+1, result, n-1)
-	}
-}
-
 func main() {
 	fmt.Println(fib(5))
 }
@@ -57,19 +45,34 @@ func fibIter(a, b, count int) int {
 		return fibIter(a+b, a, count-1)
 	}
 }
-// fib(6) = 8
-// a  b count
-// -----------
-// 1  0     6
-// 1  1     5
-// 2  1     4
-// 3  2     3
-// 5  3     2
-// 8  5     1
-// 13 8     0
 
-// f(5) = 25
-// n1 n2 n3 count
-// ---------------
-//  2  1  0     5
-//
+// resTotal = res0 + 2*res1 + 3*res2
+
+// f(3) = f(2) + 2*f(1) + 3*f(0) = 2 +   2*1 +  3*0 = 4
+//                                 res0, res1, res2 = 2, 1, 0
+
+// resTotal = 2 + 2*1 + 3*0 = 2 + 2 + 0 = 4
+// f(4) = f(3) + 2*f(2) + 3*f(1) = 4 +   2*2 + 3*1  = 11
+// 								   res0, res1, res2 = resTotal, res0, res1 = 4, 2, 1
+
+// resTotal = 4 + 2*2 + 3*1 = 11
+// f(5) = f(4) + 2*f(3) + 3*f(2) = 11 + 2*4 + 3*2 = 25 => res0, res1, res2
+
+
+
+func FIterative(n int) int {
+	if n < 3 {
+		return n
+	}
+	return fIterator(2, 1, 0, n-3)
+}
+
+func fIterator(res0 int, res1 int, res2 int, counter int) int {
+	resTotal := res0 + 2*res1 + 3*res2
+
+	if counter == 0 {
+		return resTotal
+	} else {
+		return fIterator(resTotal, res0, res1, counter-1)
+	}
+}
