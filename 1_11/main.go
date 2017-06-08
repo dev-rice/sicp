@@ -1,6 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"os"
+	"strconv"
+	"time"
+)
+
+func timeTrack(start time.Time, name string) {
+	elapsed := time.Since(start)
+	log.Printf("%s took %s", name, elapsed)
+}
 
 // A function f is defined by the rule that f(n) = n if n<3 and
 // f(n) = f(n - 1) + 2f(n - 2) + 3f(n - 3) if n >= 3. Write a procedure that
@@ -23,7 +33,21 @@ func FRecursive(n int) int {
 // grows linearly with n. Such a process is called a linear iterative process.
 
 func main() {
-	fmt.Println(fib(5))
+	if len(os.Args) <= 1 {
+		log.Fatal("n was not specified")
+	}
+	n, err := strconv.Atoi(os.Args[1])
+	if err != nil {
+		log.Fatal("n was not specified")
+	}
+	log.Printf("n = %d", n)
+
+	func() {
+		defer timeTrack(time.Now(), "FRecursive")
+		FRecursive(n)
+	}()
+
+	FIterative(n)
 }
 
 // (define (fib n)
@@ -57,10 +81,9 @@ func fibIter(a, b, count int) int {
 
 // resTotal = 4 + 2*2 + 3*1 = 11
 // f(5) = f(4) + 2*f(3) + 3*f(2) = 11 + 2*4 + 3*2 = 25 => res0, res1, res2
-
-
-
 func FIterative(n int) int {
+	defer timeTrack(time.Now(), "FIterative")
+
 	if n < 3 {
 		return n
 	}
